@@ -9,8 +9,7 @@ export default class App extends Component {
 
 	apiKey = process.env.REACT_APP_API_KEY
 	state = {
-		progress: 10,
-		
+		progress: 10,	
 	}
 	
 	setProgress = (progress) => {

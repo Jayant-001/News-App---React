@@ -100,11 +100,11 @@ export default class News extends Component {
     };
 
     fetchMoreData = async () => {
+        
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8e332278873f4c6284c548a95e14289c&page=${this.state.page+1}&pagesize=${this.props.pageSize}`;
         this.setState({
             page: this.state.page + 1,
         });
-
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8e332278873f4c6284c548a95e14289c&page=${this.state.page}&pagesize=${this.props.pageSize}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         // console.log(parsedData);
@@ -118,40 +118,58 @@ export default class News extends Component {
     render() {
         return (
             <>
-                <h2 className="text-center my-3">NewsMonkey - Top Headlines on {this.capitalizeFirstLetter(this.props.category)}</h2>
+                <h2 className='text-center' style={{marginTop: '80px', marginBottom:'20px'}}>
+                    NewsMonkey - Top Headlines on{" "}
+                    {this.capitalizeFirstLetter(this.props.category)}
+                </h2>
                 {/* Spinner shows only when loading is true */}
                 {/* {this.state.loading && <Spinner />} */}
 
                 <InfiniteScroll
                     dataLength={this.state.articles.length}
                     next={this.fetchMoreData}
-                    hasMore={this.state.articles.length !== this.state.totalReaults}
+                    hasMore={
+                        this.state.articles.length !== this.state.totalReaults
+                    }
                     loader={<Spinner />}
                 >
-                    <div className="container">
-                        <div className="row">
+                    <div className='container'>
+                        <div className='row'>
                             {/* news items shows only when loading is false */}
-                            {!this.state.loading && this.state.articles.map((element) => {
-                                return (
-                                    <div className="col-md-4" key={element.url}>
-                                        <NewsItem
-                                            // key={element.id}
-                                            title={element.title ? element.title : ""}
-                                            description={element.description ? element.description.slice(0, 100) : ""}
-                                            imageUrl={element.urlToImage}
-                                            newsUrl={element.url}
-                                            author={element.author}
-                                            date={element.publishedAt}
-                                            source={element.source.name}
-                                        />
-                                    </div>
-                                );
-                            })}
+                            {!this.state.loading &&
+                                this.state.articles.map((element) => {
+                                    return (
+                                        <div
+                                            className='col-md-4'
+                                            key={element.url}
+                                        >
+                                            <NewsItem
+                                                // key={element.id}
+                                                title={
+                                                    element.title
+                                                        ? element.title
+                                                        : ""
+                                                }
+                                                description={
+                                                    element.description
+                                                        ? element.description.slice(
+                                                              0,
+                                                              100
+                                                          )
+                                                        : ""
+                                                }
+                                                imageUrl={element.urlToImage}
+                                                newsUrl={element.url}
+                                                author={element.author}
+                                                date={element.publishedAt}
+                                                source={element.source.name}
+                                            />
+                                        </div>
+                                    );
+                                })}
                         </div>
                     </div>
-                    
                 </InfiniteScroll>
-                
             </>
         );
     }
